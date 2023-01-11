@@ -2,9 +2,11 @@
 using MagicVilla_VillaAPI.Models;
 using MagicVilla_VillaAPI.Models.Dto;
 using MagicVilla_VillaAPI.Repository.IRepository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 using System.Net;
 
 namespace MagicVilla_VillaAPI.Controllers
@@ -47,7 +49,7 @@ namespace MagicVilla_VillaAPI.Controllers
 
 
 
-
+        [Authorize(Roles = "admin")]
         [HttpGet("{id:int}", Name = "GetVillaNumber")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -86,7 +88,7 @@ namespace MagicVilla_VillaAPI.Controllers
 
 
 
-
+        [Authorize(Roles = "admin")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -128,7 +130,7 @@ namespace MagicVilla_VillaAPI.Controllers
 
 
 
-
+        [Authorize(Roles = "admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -164,7 +166,7 @@ namespace MagicVilla_VillaAPI.Controllers
 
 
 
-
+        [Authorize(Roles = "admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPut("{id:int}", Name = "UpdateVillaNumber")]
@@ -203,7 +205,7 @@ namespace MagicVilla_VillaAPI.Controllers
 
 
 
-
+        [Authorize(Roles = "admin")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPatch("{id:int}", Name = "UpdatePartialVillaNumber")]

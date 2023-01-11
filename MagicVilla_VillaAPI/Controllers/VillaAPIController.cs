@@ -28,7 +28,7 @@ namespace MagicVilla_VillaAPI.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -95,7 +95,7 @@ namespace MagicVilla_VillaAPI.Controllers
 
 
         [HttpPost]
-        
+        [Authorize(Roles = "admin")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -132,7 +132,7 @@ namespace MagicVilla_VillaAPI.Controllers
 
 
 
-        [Authorize(Roles = "CUSTOM")]
+        [Authorize(Roles = "admin")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -170,7 +170,7 @@ namespace MagicVilla_VillaAPI.Controllers
 
 
 
-
+        [Authorize(Roles = "admin")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPut("{id:int}", Name = "UpdateVilla")]
@@ -201,7 +201,7 @@ namespace MagicVilla_VillaAPI.Controllers
 
 
 
-
+        [Authorize(Roles = "admin")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPatch("{id:int}", Name = "UpdatePartialVilla")]
