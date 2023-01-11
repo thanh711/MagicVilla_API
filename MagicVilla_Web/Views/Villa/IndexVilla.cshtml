@@ -1,0 +1,33 @@
+﻿@model IEnumerable<VillaDTO>
+<h2>List Villa</h2>
+<div class="container-fluid border border-secondary p-3">
+    <a class="btn btn-success" asp-action="CreateVilla"><i class="fa-solid fa-plus"></i> Add Villa</a>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Occupancy</th>
+                <th scope="col">Price</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <th scope="row">@item.Name</th>
+                    <td>@item.Occupancy</td>
+                    <td>@((item.Rate).ToString("c"))</td>
+                    <td>
+                        <a class="btn btn-warning" asp-action="UpdateVilla" asp-route-id="@item.Id"><i class="fa-solid fa-pencil"></i> Update</a>
+                        <form asp-action="DeleteVilla" asp-route-id="@item.Id"
+                          onclick="return confirm('Are you sure you want to delete this?')">
+                            <button type="submit" class="btn btn-danger"><i class="fa-solid fa-trash-can"></i> Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+</div>
