@@ -8,7 +8,19 @@ namespace MagicVilla_VillaAPI.Models
         {
             ErrorMessages = new List<string>();
         }
-        public HttpStatusCode StatusCode { get; set; }
+        private HttpStatusCode statusCode;
+        public HttpStatusCode StatusCode
+        {
+            get => statusCode;
+            set
+            {
+                if ((int)value >= 400)
+                {
+                    IsSuccess = false;
+                }
+                statusCode = value;
+            }
+        }
         public bool IsSuccess { get; set; }=true;
         public List<string> ErrorMessages { get; set; }
         public object Result { get; set; }

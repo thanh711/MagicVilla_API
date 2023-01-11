@@ -7,8 +7,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Net;
+using System.Text.Json;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace MagicVilla_VillaAPI.Controllers.v1
 {
@@ -29,15 +32,34 @@ namespace MagicVilla_VillaAPI.Controllers.v1
         }
 
         [HttpGet]
-
+        [ResponseCache(CacheProfileName = "Default30")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult<APIResponse>> GetVillas()
+        public async Task<ActionResult<APIResponse>> GetVillas([FromQuery(Name ="filterOccupancy")]int? occupancy, [FromQuery] string? search,
+            int pageSize = 3, int pageNumber = 1)
         {
             try
             {
-                IEnumerable<Villa> list = await _dbVilla.GetAllAsync();
+                IEnumerable<Villa> list;
+                if(occupancy > 0)
+                {
+                    list = await _dbVilla.GetAllAsync(u=>u.Occupancy==occupancy,pageSize:pageSize,pageNumber:pageNumber);
+                }
+                else
+                {
+                    list = await _dbVilla.GetAllAsync( pageSize: pageSize, pageNumber: pageNumber);
+                }
+                if (!string.IsNullOrEmpty(search))
+                {
+                    list = list.Where(u => u.Amenity.ToLower().Contains(search) || u.Name.ToLower().Contains(search));
+                }
+                Pagination pagination = new()
+                {
+                    PageNumber = pageNumber,
+                    PageSize = pageSize
+                };
+                Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(pagination));
                 _response.Result = _mapper.Map<IEnumerable<VillaDTO>>(list);
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
@@ -53,7 +75,7 @@ namespace MagicVilla_VillaAPI.Controllers.v1
 
 
 
-        [Authorize(Roles = "admin")]
+       // [Authorize(Roles = "admin")]
         [HttpGet("{id:int}", Name = "GetVilla")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
